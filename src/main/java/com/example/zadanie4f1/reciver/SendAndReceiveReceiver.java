@@ -1,7 +1,7 @@
 package com.example.zadanie4f1.reciver;
 
 import com.example.zadanie4f1.config.JmsConfig;
-import com.example.zadanie4f1.model.HelloMessage;
+import com.example.zadanie4f1.model.BolidStatistic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
@@ -18,15 +18,15 @@ import java.time.LocalDateTime;
 public class SendAndReceiveReceiver {
     private final JmsTemplate jmsTemplate;
     @JmsListener(destination = JmsConfig.QUEUE_SEND_AND_RECEIVE)
-    public void receiveAndRespond(@Payload HelloMessage convertedMessage,
+    public void receiveAndRespond(@Payload BolidStatistic convertedMessage,
                                   @Headers MessageHeaders headers,
                                   Message message) throws JMSException {
         System.out.println("SendAndReceiveReceiver.receiveAndRespond message: "+convertedMessage);
                 Destination replyTo = message.getJMSReplyTo();
-        HelloMessage msg = HelloMessage.builder()
-                .id(HelloMessage.nextId())
+        BolidStatistic msg = BolidStatistic.builder()
+                .id(BolidStatistic.nextId())
                 .createdAt(LocalDateTime.now())
-                .message("You're welcome!")
+//                .message("You're welcome!")
                 .build();
         jmsTemplate.convertAndSend(replyTo, msg);
     }

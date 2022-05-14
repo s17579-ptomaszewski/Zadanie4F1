@@ -19,7 +19,9 @@ import javax.jms.JMSException;
 import javax.jms.Session;
 @Configuration
 public class JmsConfig {
-    public static final String QUEUE_HELLO_WORLD = "HELLO.QUEUE";
+    public static final String QUEUE_BOLID = "BOLID.QUEUE";
+
+    public static final String QUEUE_MECHANIC = "MECHANIK.QUEUE";
     public static final String TOPIC_HELLO_WORLD = "HELLO.TOPIC";
     public static final String QUEUE_SEND_AND_RECEIVE = "SEND_RECEIVE.QUEUE";
 
