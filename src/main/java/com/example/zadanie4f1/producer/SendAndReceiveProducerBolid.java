@@ -1,7 +1,7 @@
 package com.example.zadanie4f1.producer;
 
 import com.example.zadanie4f1.config.JmsConfig;
-import com.example.zadanie4f1.model.BolidStatistic;
+import com.example.zadanie4f1.model.DescendMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +16,15 @@ import javax.jms.TextMessage;
 import java.time.LocalDateTime;
 @Component
 @RequiredArgsConstructor
-public class SendAndReceiveProducer {
+public class SendAndReceiveProducerBolid {
     private final JmsTemplate jmsTemplate;
     private final ObjectMapper objectMapper;
-//    @Scheduled(fixedRate = 2000)
+    @Scheduled(fixedRate = 30000)
     public void sendAndReceive() throws JMSException, JsonProcessingException {
-        BolidStatistic bolidStatistic = BolidStatistic.builder()
-                .id(BolidStatistic.nextId())
+        DescendMessage descendMessage = DescendMessage.builder()
+                .id(DescendMessage.nextId())
                 .createdAt(LocalDateTime.now())
-//                .message("Thank you")
+                .message("I need a pit stop")
                 .build();
         TextMessage responseMessage = (TextMessage) jmsTemplate.sendAndReceive(
                 JmsConfig.QUEUE_SEND_AND_RECEIVE, new MessageCreator() {
@@ -32,9 +32,9 @@ public class SendAndReceiveProducer {
                     public Message createMessage(Session session) throws JMSException {
                         TextMessage plainMessage = session.createTextMessage();
                         try {
-                            plainMessage.setText(objectMapper.writeValueAsString(bolidStatistic));
+                            plainMessage.setText(objectMapper.writeValueAsString(descendMessage));
                             plainMessage.setStringProperty("_type",
-                                    BolidStatistic.class.getName());
+                                    DescendMessage.class.getName());
                             return plainMessage;
                         } catch (JsonProcessingException e) {
                             throw new JMSException("conversion to json failed: " +
@@ -43,8 +43,8 @@ public class SendAndReceiveProducer {
                     }
                 });
         String responseText = responseMessage.getText();
-        BolidStatistic responseConverted = objectMapper.readValue(responseText,
-                BolidStatistic.class);
+        DescendMessage responseConverted = objectMapper.readValue(responseText,
+                DescendMessage.class);
         System.out.println("SendAndReceiveProducer.sendAndReceive got response: "
                 +responseText+"\n\tconvertedMessage: "+responseConverted);
     }

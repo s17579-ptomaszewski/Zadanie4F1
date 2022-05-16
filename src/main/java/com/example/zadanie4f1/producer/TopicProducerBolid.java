@@ -11,12 +11,12 @@ import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
-public class TopicProducer {
+public class TopicProducerBolid {
     private final JmsTemplate jmsTemplate;
     Random randomStat = new Random();
 
         @Scheduled(fixedRate = 15000)
-    public void sendHello() {
+    public void sendData() {
         BolidStatistic bolidStatistic = BolidStatistic.builder()
                 .id(BolidStatistic.nextId())
                 .createdAt(LocalDateTime.now())
